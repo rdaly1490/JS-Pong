@@ -116,8 +116,9 @@ function drawEverything() {
 	if (showingWinScreen) {
 		var winner = playerScore >= winningScore ? 'Player Won' : 'Computer Won';
 		canvasContext.fillStyle = 'white';
-		canvasContext.fillText('Game Over: ' + winner, canvas.width/2, canvas.height/2);
-		canvasContext.fillText('Click To Continue', canvas.width/2, canvas.height/2 + 30);
+		canvasContext.font = '20px Times New Roman';
+		canvasContext.fillText('Game Over: ' + winner, 300, 300);
+		canvasContext.fillText('Click To Continue', 340, 400);
 		return;
 	}
 
@@ -136,6 +137,7 @@ function drawEverything() {
 	colorCircle(ballX, ballY, ballRadius, 'white');
 
 	// game score info
+	canvasContext.font = '20px Times New Roman';
 	canvasContext.fillText(playerScore, 100, 100);
 	canvasContext.fillText(compScore, canvas.width - 100, 100);
 }
