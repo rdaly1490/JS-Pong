@@ -10,9 +10,15 @@ var ballSpeedY = 4;
 
 // game paddles
 var paddleHeight = 100;
-var paddleWidth = 10;
-var leftPaddleX = 10;
+var paddleThickness = 10;
+
+var distanceFromGameEdge = 10;
+
+// distance from left side
 var leftPaddleY = 250;
+
+// distance from right sidepadd
+var rightPaddleY = 250;
 
 window.onload = function() {
 
@@ -39,7 +45,7 @@ function moveEverything() {
 	ballY = ballY + ballSpeedY;
 
 	// players x-side of board
-	if (ballX < 0 + (paddleWidth + leftPaddleX + ballRadius)) {
+	if (ballX < 0 + (paddleThickness + distanceFromGameEdge + ballRadius)) {
 		// if below top of paddle and above bottom of paddle, change direction
 		if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
 			ballSpeedX = -ballSpeedX;
@@ -62,7 +68,10 @@ function drawEverything() {
 	colorRect(0, 0, canvas.width, canvas.height, 'black');
 
 	// left player paddle
-	colorRect(leftPaddleX, leftPaddleY, paddleWidth, paddleHeight, 'white');
+	colorRect(distanceFromGameEdge, leftPaddleY, paddleThickness, paddleHeight, 'white');
+
+	//rifht player paddle
+	colorRect((canvas.width - distanceFromGameEdge - paddleThickness), rightPaddleY, paddleThickness, paddleHeight, 'white');
 
 	// game ball
 	colorCircle(ballX, ballY, ballRadius, 'white');
