@@ -11,14 +11,15 @@ var ballSpeedY = 4;
 // game paddles
 var paddleHeight = 100;
 var paddleThickness = 10;
-
 var distanceFromGameEdge = 10;
-
 // distance from left side
 var leftPaddleY = 250;
-
 // distance from right sidepadd
 var rightPaddleY = 250;
+
+// scores
+var playerScore = 0;
+var compScore = 0;
 
 window.onload = function() {
 
@@ -41,21 +42,32 @@ window.onload = function() {
 }
 
 function moveEverything() {
-	ballX = ballX + ballSpeedX;
-	ballY = ballY + ballSpeedY;
+
+	computerPaddleMovement();
+
+	// below means ballX += ballX + ballSpeedX;
+	ballX += ballSpeedX;
+	ballY += ballSpeedY;
+	var paddleOffset = paddleThickness + distanceFromGameEdge + ballRadius;
 
 	// players x-side of board
-	if (ballX < 0 + (paddleThickness + distanceFromGameEdge + ballRadius)) {
+	if (ballX < 0 + paddleOffset) {
 		// if below top of paddle and above bottom of paddle, change direction
 		if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
 			ballSpeedX = -ballSpeedX;
 		} else {
 			ballReset();
+			compScore++;
 		}
 	}
-	// comps x-side of board
-	if (ballX > canvas.width) {
-		ballSpeedX = -ballSpeedX;
+	// computers x-side of board
+	if (ballX > canvas.width - paddleOffset) {
+		if (ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
+			ballSpeedX = -ballSpeedX;
+		} else {
+			ballReset();
+			playerScore++;
+		}
 	}
 	// check y bounds of game ball
 	if (ballY > canvas.height || ballY < 0) {
@@ -75,6 +87,10 @@ function drawEverything() {
 
 	// game ball
 	colorCircle(ballX, ballY, ballRadius, 'white');
+
+	// game score info
+	canvasContext.fillText(playerScore, 100, 100);
+	canvasContext.fillText(compScore, canvas.width - 100, 100);
 }
 
 function colorCircle(centerX, centerY, radius, drawColor) {
@@ -108,6 +124,15 @@ function ballReset() {
 	ballY = canvas.height/2;
 }
 
+function computerPaddleMovement() {
+	var paddleRightYCenter = rightPaddleY + (paddleHeight/2);
+	// if players paddle is above the ball move down a bit else move up a bit
+	if (paddleRightYCenter < ballY - 35) {
+		rightPaddleY += 6;
+	} else if (paddleRightYCenter < ballY + 35) {
+		rightPaddleY -= 6;
+	}
+}
 
 
 
