@@ -22,6 +22,8 @@ var playerScore = 0;
 var compScore = 0;
 var winningScore = 3;
 
+var showingWinScreen = false;
+
 window.onload = function() {
 
 	canvas = document.getElementById('game-canvas');
@@ -40,6 +42,14 @@ window.onload = function() {
 		leftPaddleY = mousePos.y - (paddleHeight/2);
 	});
 
+	canvas.addEventListener('click', function(e) {
+		if (showingWinScreen) {
+			playerScore = 0;
+			compScore = 0;
+			showingWinScreen = false;
+		}
+	})
+
 }
 
 function computerPaddleMovement() {
@@ -53,6 +63,9 @@ function computerPaddleMovement() {
 }
 
 function moveEverything() {
+	if (showingWinScreen) {
+		return;
+	}
 
 	computerPaddleMovement();
 
@@ -94,6 +107,14 @@ function moveEverything() {
 }
 
 function drawEverything() {
+	if (showingWinScreen) {
+		var winner = playerScore >= winningScore ? 'Player Won' : 'Computer Won';
+		canvasContext.fillStyle = 'white';
+		canvasContext.fillText('Game Over: ' + winner, canvas.width/2, canvas.height/2);
+		canvasContext.fillText('Click To Continue', canvas.width/2, canvas.height/2 + 30);
+		return;
+	}
+
 	// black game background
 	colorRect(0, 0, canvas.width, canvas.height, 'black');
 
@@ -138,8 +159,7 @@ function ballReset() {
 
 	// reset scores if game over
 	if (playerScore >= winningScore || compScore >= winningScore){
-		playerScore = 0;
-		compScore = 0;
+		showingWinScreen = true;
 	}
 
 	// have ball reset to opposite direction after score
