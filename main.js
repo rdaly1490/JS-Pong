@@ -24,18 +24,34 @@ setInterval(function() {
 function moveEverything() {
 	ballX = ballX + ballSpeedX;
 	// check bounds of game ball
-	if (ballX > canvas.width) {
+	if (ballX > canvas.width || ballX < 0) {
 		ballSpeedX = -ballSpeedX; 
-	} else if (ballX < 0) {
-		ballSpeedX = -ballSpeedX;
 	}
 }
 
 function drawEverything() {
-	canvasContext.fillStyle = 'black';
-	canvasContext.fillRect(0,0, canvas.width, canvas.height);
-	canvasContext.fillStyle = 'white';
-	canvasContext.fillRect(10, 210, 10, 100);
-	canvasContext.fillStyle = 'red';
-	canvasContext.fillRect(ballX, 100, 10, 10);
+	// black game background
+	colorRect(0, 0, canvas.width, canvas.height, 'black');
+
+	// left player paddle
+	colorRect(10, 210, 10, 100, 'white');
+
+	// game ball
+	colorCircle(ballX, 150, 10, 'white');
 }
+
+function colorCircle(centerX, centerY, radius, drawColor) {
+		canvasContext.fillStyle = drawColor;
+		canvasContext.beginPath();
+		canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2, true);
+		canvasContext.fill();
+}
+
+function colorRect(leftX, topY, width, height, drawColor) {
+	canvasContext.fillStyle = drawColor;
+	canvasContext.fillRect(leftX, topY, width, height);
+}
+
+
+
+
