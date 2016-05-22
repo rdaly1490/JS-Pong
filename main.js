@@ -20,6 +20,7 @@ var rightPaddleY = 250;
 // scores
 var playerScore = 0;
 var compScore = 0;
+var winningScore = 3;
 
 window.onload = function() {
 
@@ -41,6 +42,16 @@ window.onload = function() {
 
 }
 
+function computerPaddleMovement() {
+	var paddleRightYCenter = rightPaddleY + (paddleHeight/2);
+	// if players paddle is above the ball move down a bit else move up a bit
+	if (paddleRightYCenter < ballY - 35) {
+		rightPaddleY += 6;
+	} else if (paddleRightYCenter > ballY + 35) {
+		rightPaddleY -= 6;
+	}
+}
+
 function moveEverything() {
 
 	computerPaddleMovement();
@@ -55,18 +66,25 @@ function moveEverything() {
 		// if below top of paddle and above bottom of paddle, change direction
 		if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
 			ballSpeedX = -ballSpeedX;
+
+			// increase ball speed if user hits with corner of paddle instead of center
+			var deltaY = ballY - (leftPaddleY + paddleHeight/2);
+			// scale the speed, 100% deltaY too fast
+			ballSpeedY = deltaY * 0.35; 
 		} else {
-			ballReset();
 			compScore++;
+			ballReset();
 		}
 	}
 	// computers x-side of board
 	if (ballX > canvas.width - paddleOffset) {
 		if (ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
 			ballSpeedX = -ballSpeedX;
+			var deltaY = ballY - (rightPaddleY + paddleHeight/2);
+			ballSpeedY = deltaY * 0.35; 
 		} else {
-			ballReset();
 			playerScore++;
+			ballReset();
 		}
 	}
 	// check y bounds of game ball
@@ -117,21 +135,18 @@ function calculateMousePosition(e) {
 }
 
 function ballReset() {
+
+	// reset scores if game over
+	if (playerScore >= winningScore || compScore >= winningScore){
+		playerScore = 0;
+		compScore = 0;
+	}
+
 	// have ball reset to opposite direction after score
 	ballSpeedX = -ballSpeedX
 	// have ball shoot out from mid court
 	ballX = canvas.width/2;
 	ballY = canvas.height/2;
-}
-
-function computerPaddleMovement() {
-	var paddleRightYCenter = rightPaddleY + (paddleHeight/2);
-	// if players paddle is above the ball move down a bit else move up a bit
-	if (paddleRightYCenter < ballY - 35) {
-		rightPaddleY += 6;
-	} else if (paddleRightYCenter < ballY + 35) {
-		rightPaddleY -= 6;
-	}
 }
 
 
