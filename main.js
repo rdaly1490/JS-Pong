@@ -106,6 +106,12 @@ function moveEverything() {
 	}
 }
 
+function drawNet() {
+	for (var i=0; i<canvas.height; i+=40) {
+		colorRect(canvas.width/2 - 1, i, 2, 20, 'white');
+	}
+}
+
 function drawEverything() {
 	if (showingWinScreen) {
 		var winner = playerScore >= winningScore ? 'Player Won' : 'Computer Won';
@@ -117,6 +123,8 @@ function drawEverything() {
 
 	// black game background
 	colorRect(0, 0, canvas.width, canvas.height, 'black');
+
+	drawNet();
 
 	// left player paddle
 	colorRect(distanceFromGameEdge, leftPaddleY, paddleThickness, paddleHeight, 'white');
@@ -168,6 +176,5 @@ function ballReset() {
 	ballX = canvas.width/2;
 	ballY = canvas.height/2;
 }
-
 
 
