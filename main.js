@@ -4,11 +4,14 @@ var canvasContext;
 // game ball
 var ballX = 50;
 var ballY = 50;
+var ballRadius = 10;
 var ballSpeedX = 10;
 var ballSpeedY = 4;
 
 // game paddles
 var paddleHeight = 100;
+var paddleWidth = 10;
+var leftPaddleX = 10;
 var leftPaddleY = 250;
 
 window.onload = function() {
@@ -29,20 +32,24 @@ window.onload = function() {
 		leftPaddleY = mousePos.y - (paddleHeight/2);
 	});
 
-
-
-
-
-
 }
 
 function moveEverything() {
 	ballX = ballX + ballSpeedX;
 	ballY = ballY + ballSpeedY;
 
-	// check x bounds of game ball
-	if (ballX > canvas.width || ballX < 0) {
-		ballSpeedX = -ballSpeedX; 
+	// players x-side of board
+	if (ballX < 0 + (paddleWidth + leftPaddleX + ballRadius)) {
+		// if below top of paddle and above bottom of paddle, change direction
+		if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
+			ballSpeedX = -ballSpeedX;
+		} else {
+			ballReset();
+		}
+	}
+	// comps x-side of board
+	if (ballX > canvas.width) {
+		ballSpeedX = -ballSpeedX;
 	}
 	// check y bounds of game ball
 	if (ballY > canvas.height || ballY < 0) {
@@ -55,10 +62,10 @@ function drawEverything() {
 	colorRect(0, 0, canvas.width, canvas.height, 'black');
 
 	// left player paddle
-	colorRect(10, leftPaddleY, 10, paddleHeight, 'white');
+	colorRect(leftPaddleX, leftPaddleY, paddleWidth, paddleHeight, 'white');
 
 	// game ball
-	colorCircle(ballX, ballY, 10, 'white');
+	colorCircle(ballX, ballY, ballRadius, 'white');
 }
 
 function colorCircle(centerX, centerY, radius, drawColor) {
@@ -82,6 +89,14 @@ function calculateMousePosition(e) {
 		x: mouseX,
 		y: mouseY
 	};
+}
+
+function ballReset() {
+	// have ball reset to opposite direction after score
+	ballSpeedX = -ballSpeedX
+	// have ball shoot out from mid court
+	ballX = canvas.width/2;
+	ballY = canvas.height/2;
 }
 
 
